@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+    	<link href="styles/style.css" rel="stylesheet" type="text/css">
+		</head>
+	<body>
+		
+		<div id="container"></div>
+
+		<script>
+			
+			let across = 16;
+			let down = 16;
+			let size = 960/across;
+			const container = document.querySelector("#container");  
+
+			for (var j = 0; j < down; j++) {
+				for (var i = 0; i < across ;  i++) {
+					const grid= document.createElement('div');
+					grid.setAttribute("style","background-color:pink; border:1px solid black; width:30px; height:30px");    
+					/*grid.style.display = "inline-block";*/
+					row.appendChild(grid)
+				};
+			};
+
+			container.classList.add("grid-container")
+			
+
+		</script>
+	</body>
+
+</html>

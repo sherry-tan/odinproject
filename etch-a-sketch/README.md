@@ -1,0 +1,1 @@
+This project builds a browser version of a sketch pad and was completed as part of the odin project's Web Development 101 curriculum. 

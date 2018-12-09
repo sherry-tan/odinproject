@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <script>
+ 		function computerPlay(){
+ 			let selections = ["Rock", "Paper", "Scissors"];
+ 			return selections[Math.floor(Math.random() * selections.length)];
+ 		}
+
+ 		function playRound(computerSelection, playerSelection){
+ 			
+ 			let text;
+
+ 			playerSelection = playerSelection.charAt(0).toUpperCase() + playerSelection.substr(1).toLowerCase();
+ 			
+ 			if (playerSelection == computerSelection) {
+ 				return "It's a draw!"; 
+ 			}
+ 			else if (playerSelection == "Rock"){
+ 				text =  (computerSelection == "Scissors")? "You win!":"You lose!"
+ 				}
+ 			else if (playerSelection == "Scissors"){
+ 				text =  (computerSelection == "Paper")? "You win!":"You lose!"
+ 				}
+ 			else {
+ 				text =  (computerSelection == "Rock")? "You win!":"You lose!"
+ 			}
+
+ 			if (text == "You win!"){
+ 				text = `${text} ${playerSelection} beats ${computerSelection}!`;
+ 			}
+ 			else {
+ 				text = `${text} ${computerSelection} beats ${playerSelection}!`;
+ 			}
+ 			
+ 			return text;
+ 		}
+
+ 		let playerSelection= prompt("Enter your choice");
+
+ 		alert(playRound(computerPlay(), playerSelection));
+
+ 		  
+  </script>
+</body>
+</html>
+
+

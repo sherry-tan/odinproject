@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	
+	<head>
+		<meta charset="utf-8">
+    <link href="styles/styleRandom.css" rel="stylesheet" type="text/css"/>
+		</head>
+	<body>
+		<div id="nav">
+			<h2> Etch - A - Sketch </h2>
+			<button id = "clear" > Clear Grid </button>
+		</div>
+		
+		<div id="container"></div>
+
+		<script>
+			
+			function createGrid(gridSize){
+
+				for (var j = 0; j < gridSize; j++) {
+
+					const container = document.querySelector("#container");
+					let size = container.offsetWidth/gridSize;
+					let row = document.createElement('div');
+
+					for (var i = 0; i < gridSize ;  i++) {
+
+						const grid= document.createElement('div');
+
+						grid.classList.add("box");
+						grid.setAttribute("style",`width:${size}px;height:${size}px`);
+						row.appendChild(grid);
+						};
+					container.appendChild(row);
+					};
+			}
+
+			function showTransition(e){
+				const grids = Array.from(document.querySelectorAll('.box'));
+				grids.forEach(grid => grid.addEventListener('mouseenter', function(e){
+				colorSwatch = ["6A86D1", "7DD16A", "C6D16A" , "D1936A", "CC6AD1"];
+				let randomColor = "#"+colorSwatch[Math.floor(Math.random()*colorSwatch.length)];
+				grid.style.backgroundColor=randomColor;
+				}));
+			};
+
+			function newGrid(e){
+				
+				let size = prompt("Please enter grid size from 16 - 64");
+
+				let container = document.getElementById("container");
+
+				while (container.hasChildNodes()) {
+    			container.removeChild(container.childNodes[0]);
+				};
+
+				createGrid(size);
+				showTransition();
+
+				};
+			
+
+			const clear = document.getElementById("clear");
+			clear.addEventListener('click', newGrid);
+
+			if (!document.getElementById("container").hasChildNodes()) {
+   				createGrid(16);
+				showTransition();
+			};
+
+
+		</script>
+	</body>
+
+</html>

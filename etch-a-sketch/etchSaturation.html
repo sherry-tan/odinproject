@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+    	<link href="styles/styleRandom.css" rel="stylesheet" type="text/css"/>
+	</head>
+	<body>
+		<div id="nav">
+			<h2> Etch - A - Sketch </h2>
+			<button id = "clear" > Clear Grid </button>
+		</div>
+		
+		<div id="container"></div>
+
+		<script>
+			
+			/*create new grid of gridSize*/
+			function createGrid(gridSize){
+
+				for (var j = 0; j < gridSize; j++) {
+
+					const container = document.querySelector("#container");
+					let size = container.offsetWidth/gridSize;
+					let row = document.createElement('div');
+
+					/* create 1 row*/
+					for (var i = 0; i < gridSize ;  i++) {
+
+						const grid= document.createElement('div');
+						grid.classList.add("box");
+						grid.setAttribute("style",`width:${size}px;height:${size}px`);
+						row.appendChild(grid);
+						};
+
+					container.appendChild(row);
+					
+					};
+			}
+
+			/* update color on mouseover */
+			function showTransition(e){
+				const grids = Array.from(document.querySelectorAll('.box'));
+				grids.forEach(grid => grid.addEventListener('mouseenter', function(e){
+				
+				/*first color update in inline style during first mouseover*/
+				if (!grid.style.backgroundColor) {
+					grid.style.backgroundColor = "rgb(0,0,0,0.1)";
+				}
+				/* update inline style for subsequent mouseovers */
+				else {
+					let rgbElements = grid.style.backgroundColor.split(",");
+					
+					/* update only if color not at 100% saturation */
+					if (rgbElements.length>3){
+
+						/*get current opacity*/
+						currentOpacity = Number(rgbElements[3].split(")")[0]);
+						updatedColor = "rgb(0,0,0," + (currentOpacity+0.1) + ")";
+						grid.style.backgroundColor = updatedColor;
+								
+					}					
+				}
+
+				}));
+			};
+
+			/* prompts for new grid size and creates new grid when button pressed */
+			function newGrid(e){
+				
+				/*rounds down or prompts for new input if invalid number*/
+				let size = Math.floor(prompt("Please enter grid size from 16 - 64"));
+				
+				while (size<16|size>64|isNaN(size)){
+					size = Math.floor(prompt("Invalid number! Please enter grid size from 16 - 64"));
+				}
+
+				let container = document.getElementById("container");
+
+				while (container.hasChildNodes()) {
+    			container.removeChild(container.childNodes[0]);
+				};
+
+				createGrid(size);
+				showTransition();
+
+				};
+			
+			/*clear and regenerate grid for button press*/
+			const clear = document.getElementById("clear");
+			clear.addEventListener('click', newGrid);
+
+			/*generates grid when page first loaded*/
+			if (!document.getElementById("container").hasChildNodes()) {
+   				createGrid(16);
+				showTransition();
+			};
+
+		</script>
+	</body>
+
+</html>
