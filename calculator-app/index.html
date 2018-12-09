@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+	
+	<head>
+		<meta charset="utf-8">
+    <link href="styles/style.css" rel="stylesheet" type="text/css"/>
+		</head>
+	<body>
+
+		<h2> Calculator </h2>
+	
+		<div id="calculator">
+			
+			<div id="display">
+				<p> Hello </p>
+			</div>
+
+			<div id = "keys">
+				<div class = "row1">
+					<button class = "number" value = 7> 7 </button>
+					<button class = "number" value = 8> 8 </button>
+					<button class = "number" value = 9> 9 </button>
+					<button  class = "operator" value = "+"> + </button>	
+				</div>
+				<div class = "row2">
+					<button class = "number" value = 4 > 4 </button>
+					<button class = "number" value = 5> 5 </button>
+					<button  class = "number" value = 6> 6 </button>
+					<button class = "operator" value = "-"> - </button>
+				</div>
+				<div class = "row3">
+					<button class = "number" value = 1> 1 </button>
+					<button class = "number" value = 2> 2 </button>
+					<button class = "number" value = 3> 3 </button>
+					<button class = "operator" value = "x"> x </button>
+				</div>
+				<div class = "row4">
+					<button class = "number" id = "zero" value = 0> 0 </button>
+					<button class = "number" value="."> . </button>
+					<button class = "operator" value = "/"> / </button>
+				
+				</div>
+				<div class = "row5">
+					<button class = "clear" value = "clear"> C </button>
+					<button class = "result" value = "="> = </button>
+					
+				</div>
+			</div>
+
+		</div>
+
+		<script>
+
+			function roundToTwo(num) {    
+   				 return +(Math.round(num + "e+2")  + "e-2");
+			}
+
+			function sanityCheck(input){
+				let count = 0;
+				for (var i = 0 ; i < input.length ; i++) {
+					if (input[i]=="."){
+						count++;
+					}		
+				};
+
+				return (count<=1)? true:false;
+			}
+
+			function updateDisplay(value) {
+  				document.querySelector("#display p").innerHTML = value;
+			}
+
+			function add(num1, num2){
+				return num1+num2;
+			}
+
+			function subtract(num1, num2){
+				return num1-num2;
+			}
+
+			function multiply(num1, num2){
+				return num1*num2;
+			}
+
+			function divide(num1, num2){
+				return num1/num2;
+			}
+
+			function operate(operationString){
+
+				let operator = operationString.operator;
+				let num1 = Number(operationString.num1);
+				let num2 = Number(operationString.num2);
+
+				switch (operator){
+					case "+":
+						return add(num1,num2);
+						break;
+					case "-":
+						return subtract(num1,num2);
+						break;
+					case "x":
+						return multiply(num1,num2);
+						break;
+					case "/":
+						if (num2==0){
+							return "Error"
+						}
+						else {
+							return divide(num1,num2);
+						}
+						break;
+				};
+			};
+
+			function checkIfEmpty(operationString){
+			
+   				for (var key in operationString) {
+        			if (operationString[key]== ""){
+        				return true;
+        			}
+        		};
+			    return false;
+			};
+
+	
+			function clickHandling(button, operationString){
+
+				value = button.getAttribute("value");
+
+				switch (button.getAttribute("class")){
+					
+					case "clear":
+						updateDisplay("");
+						operationString = {num1:"", operator:"", num2:""};
+						break;
+					
+					case "number":
+						if (operationString.operator==""){		
+							operationString.num1 += value;
+							if (sanityCheck(operationString.num1)){
+								updateDisplay(operationString.num1);
+							}
+							else {
+								updateDisplay("Error");
+							}
+						}
+						else{
+							operationString.num2 += value;
+							if (sanityCheck(operationString.num2)){
+								updateDisplay(operationString.num2);
+							}
+							else {
+								updateDisplay("Error");
+							}	
+						};
+						break;
+					
+					case "operator":
+						if (!operationString.operator){
+							operationString.operator = value;
+							updateDisplay(operationString.operator);
+							}
+						else {
+							if (!checkIfEmpty(operationString)){
+								result = operate(operationString);
+								updateDisplay(roundToTwo(result));
+								operationString.num1 = result;
+								operationString.num2 ="";
+								operationString.operator=value;
+							}
+						}
+						
+						break;
+
+					case "result":
+						if (checkIfEmpty(operationString)){
+							updateDisplay("Error");
+						}
+						else{
+							result = operate(operationString);
+							updateDisplay(roundToTwo(result));
+							operationString.num1 = result;
+							operationString.num2 ="";
+							operationString.operator="";
+						};
+						break;
+
+					default:
+							if (!checkIfEmpty(operationString)){
+								result = operate(operationString);
+								updateDisplay(roundToTwo(result));
+								operationString.num1 = result;
+								operationString.num2 ="";
+								operationString.operator="";
+							}
+				};	
+
+				return operationString;		
+			};
+			
+			function keyHandling(value, operationString){
+				let numbers = ["1","2","3","4","5","6","7","8","9","0","."];
+				let operators = ["+","-","x","/"];
+				let clear = ["C","c"];
+				let result = "Enter";
+				let inputType;
+
+				inputType = numbers.includes(value)? "number" : 
+								operators.includes(value)? "operator" :
+								clear.includes(value)? "clear":
+								(result==value)? "result":"error";
+
+				
+				switch (inputType){
+					
+					case "clear":
+						updateDisplay("");
+						operationString = {num1:"", operator:"", num2:""};
+						break;
+					
+					case "number":
+						if (operationString.operator==""){		
+							operationString.num1 += value;
+							if (sanityCheck(operationString.num1)){
+								updateDisplay(operationString.num1);
+							}
+							else {
+								updateDisplay("Error");
+							}
+						}
+						else{
+							operationString.num2 += value;
+							if (sanityCheck(operationString.num2)){
+								updateDisplay(operationString.num2);
+							}
+							else {
+								updateDisplay("Error");
+							}	
+						};
+						break;
+					
+					case "operator":
+						if (!operationString.operator){
+							operationString.operator = value;
+							updateDisplay(operationString.operator);
+							}
+						else {
+							if (!checkIfEmpty(operationString)){
+								result = operate(operationString);
+								updateDisplay(roundToTwo(result));
+								operationString.num1 = result;
+								operationString.num2 ="";
+								operationString.operator=value;
+							}
+						}
+						
+						break;
+
+					case "result":
+						if (checkIfEmpty(operationString)){
+							updateDisplay("Error");
+						}
+						else{
+							result = operate(operationString);
+							updateDisplay(roundToTwo(result));
+							operationString.num1 = result;
+							operationString.num2 ="";
+							operationString.operator="";
+						};
+						break;
+
+					case "error":
+						updateDisplay("Error");
+						break;
+						
+					default:
+							if (!checkIfEmpty(operationString)){
+								result = operate(operationString);
+								updateDisplay(roundToTwo(result));
+								operationString.num1 = result;
+								operationString.num2 ="";
+								operationString.operator="";
+							}
+				};	
+				return operationString;		
+			};
+			let buttons = Array.from(document.querySelectorAll("button"));
+
+			var operationString = {num1:"", operator:"", num2:""};
+		
+			buttons.forEach(button=>button.addEventListener('click', function (e) {
+
+				operationString = clickHandling(button, operationString);
+					
+			}));
+			
+			
+			document.addEventListener('keypress', (event) => {
+
+  				operationString = keyHandling(event.key, operationString);
+  				
+			});
+
+		</script>
+	</body>
+
+</html>
